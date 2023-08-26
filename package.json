@@ -22,7 +22,7 @@
   "license": "MIT",
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "test": "jest --collect-coverage"
+    "test": "jest --collect-coverage --passWithNoTests"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
