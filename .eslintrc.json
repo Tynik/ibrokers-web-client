@@ -1,5 +1,8 @@
 {
   "root": true,
+  "plugins": [
+    "simple-import-sort"
+  ],
   "extends": [
     "airbnb",
     "airbnb-typescript",
@@ -13,18 +16,41 @@
   },
   "rules": {
     "@typescript-eslint/no-shadow": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react/require-default-props": "off",
-    "react/prop-types": "off",
-    "import/prefer-default-export": "off",
     "@typescript-eslint/ban-ts-comment": "off",
-    "no-param-reassign": "off",
+    "import/prefer-default-export": "off",
     "import/extensions": "off",
+    "no-param-reassign": "off",
     "no-underscore-dangle": "off",
-    "react/function-component-definition": [
-      2,
+    "max-classes-per-file": "off",
+    "sort-imports": 0,
+    "simple-import-sort/imports": [
+      "error",
       {
-        "namedComponents": "arrow-function"
+        "groups": [
+          // Packages starting with `@`
+          [
+            "^@"
+          ],
+          // Packages starting with `~`
+          [
+            "^~"
+          ],
+          // Imports starting with `../`
+          [
+            "^\\.\\.(?!/?$)",
+            "^\\.\\./?$"
+          ],
+          // Imports starting with `./`
+          [
+            "^\\./(?=.*/)(?!/?$)",
+            "^\\.(?!/?$)",
+            "^\\./?$"
+          ],
+          // Side effect imports
+          [
+            "^\\u0000"
+          ]
+        ]
       }
     ]
   }
