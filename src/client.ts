@@ -1,6 +1,13 @@
 import { IBAuthenticationError, IBError } from './errors';
 import { request, timeout } from './helpers';
-import type { IBAuthenticationStatus, IBContract, IBContractId, IBSession, IBStock } from './types';
+import type {
+  IBAccounts,
+  IBAuthStatus,
+  IBContract,
+  IBContractId,
+  IBSession,
+  IBStock,
+} from './types';
 
 export const initIBClient = (host: string) => {
   const basePath = `${host}/v1/api`;
@@ -14,7 +21,7 @@ export const initIBClient = (host: string) => {
   };
 
   const reauthenticate = () => {
-    return request<IBAuthenticationStatus>(`${basePath}/iserver/reauthenticate`, {
+    return request<IBAuthStatus>(`${basePath}/iserver/reauthenticate`, {
       method: 'POST',
     });
   };
@@ -78,6 +85,10 @@ export const initIBClient = (host: string) => {
     });
   };
 
+  const getAccounts = () => {
+    return request<IBAccounts>(`${basePath}/iserver/accounts`);
+  };
+
   const getStocks = <Name extends string>(symbols: Name[]) => {
     return request<Record<Name, IBStock>>(`${basePath}/trsrv/stocks`, {
       params: { symbols },
@@ -93,6 +104,7 @@ export const initIBClient = (host: string) => {
     stopTickling,
     logout,
     //
+    getAccounts,
     getStocks,
     getContractInfo,
   };

@@ -5,6 +5,7 @@ const HOST = 'https://localhost:5500';
 const mockFetch = (response: any) => {
   global.fetch = jest.fn(() =>
     Promise.resolve({
+      ok: true,
       json: () => Promise.resolve(response),
     }),
   ) as jest.Mock;

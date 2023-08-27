@@ -12,12 +12,18 @@ export const request = async <Response>(
 ) => {
   const input = `${url}?${params ? new URLSearchParams(params).toString() : ''}`;
 
-  const response = fetch(input, {
+  const response = await fetch(input, {
     method,
     body: method === 'POST' ? JSON.stringify(data) : undefined,
   });
 
-  return (await (await response).json()) as Response;
+  const responseData = await response.json();
+
+  if (!response.ok) {
+    return Promise.reject(responseData);
+  }
+
+  return responseData as Response;
 };
 
 export const noop = () => {

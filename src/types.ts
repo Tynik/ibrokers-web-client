@@ -1,14 +1,36 @@
 export type IBContractId = number;
 export type IBSessionId = string;
 export type IBUserId = number;
+export type IBAccountId = string;
 
 export type IBExchange = 'NASDAQ' | 'NYSE' | 'MEXI' | 'EBS' | 'LSEETF' | 'AEQLIT';
 
+type IBServerInfo = {
+  serverName: string;
+  serverVersion: string;
+};
+
 export type IBAuthStatus = {
   authenticated: boolean;
+  // Brokerage session is competing, e.g. user is logged in to IBKR Mobile, WebTrader, TWS or other trading platforms.
   competing: boolean;
   connected: boolean;
+  // System messages that may affect trading
+  message: string;
   MAC: string;
+  serverInfo: IBServerInfo;
+  // Why authentication is failed
+  fail?: string;
+  // Prompt messages that may affect trading or the account
+  prompts?: string[];
+};
+
+type IBHMDS = {
+  authStatus: {
+    authenticated: boolean;
+    connected: boolean;
+  };
+  error?: string;
 };
 
 export type IBSession = {
@@ -16,25 +38,57 @@ export type IBSession = {
   session: IBSessionId;
   ssoExpires: number;
   collission: boolean;
-  hmds: {
-    error: string;
-  };
+  hmds: IBHMDS;
   iserver: {
     authStatus: IBAuthStatus;
   };
 };
 
-export type IBAuthenticationStatus = {
-  authenticated: boolean;
-  connected: boolean;
-  // Brokerage session is competing, e.g. user is logged in to IBKR Mobile, WebTrader, TWS or other trading platforms.
-  competing: boolean;
-  // Why authentication is failed
-  fail: string;
-  // System messages that may affect trading
-  message: string;
-  // Prompt messages that may affect trading or the account
-  prompts: string[];
+type IBAccountProps = {
+  hasChildAccounts: boolean;
+  supportsCashQty: boolean;
+  noFXConv: boolean;
+  isProp: boolean;
+  supportsFractions: boolean;
+  allowCustomerTime: boolean;
+};
+
+type IBAccountFeatures = {
+  showGFIS: boolean;
+  showEUCostReport: boolean;
+  allowFXConv: boolean;
+  allowFinancialLens: boolean;
+  allowMTA: boolean;
+  allowTypeAhead: boolean;
+  allowEventTrading: boolean;
+  snapshotRefreshTimeout: number;
+  liteUser: boolean;
+  showWebNews: boolean;
+  research: boolean;
+  debugPnl: boolean;
+  showTaxOpt: boolean;
+  showImpactDashboard: boolean;
+  allowDynAccount: boolean;
+  allowCrypto: boolean;
+  // Separated by comma
+  allowedAssetTypes: string;
+};
+
+type IBChartPeriod = '2h' | '1d' | '2d' | '1w' | '1m' | '*';
+
+export type IBAccounts = {
+  sessionId: string;
+  isFT: boolean;
+  isPaper: boolean;
+  accounts: IBAccountId[];
+  acctProps: Record<IBAccountId, IBAccountProps>;
+  aliases: Record<IBAccountId, string>;
+  selectedAccount: IBAccountId;
+  allowFeatures: IBAccountFeatures;
+  chartPeriods: Record<string, IBChartPeriod[]>;
+  groups: unknown[];
+  profiles: unknown[];
+  serverInfo: IBServerInfo;
 };
 
 export type IBStockContract = {
